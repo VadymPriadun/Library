@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <fstream>
+
 using namespace std;
 
 enum Status{
@@ -37,15 +37,10 @@ private:
     int count_of_pages;
     Genre genre;
     string link;
-    vector<string> pages;
     int currentPage;
 public:
-    Book(const string& bookName, double bookPrice, const string& bookAuthor, const string& bookPublication,
-         int bookYear, int bookPages, Genre bookGenre, const string& bookLink)
-        : name(bookName), price(bookPrice), author(bookAuthor), publication(bookPublication),
-          year(bookYear), count_of_pages(bookPages), genre(bookGenre), link(bookLink), currentPage(1) {
-        readPagesFromLink();  
-    }
+    Book(const string& bookName, double bookPrice, const string& bookAuthor, const string& bookPublication, int bookYear, int bookPages, Genre bookGenre, const string& bookLink)
+        : name(bookName), price(bookPrice), author(bookAuthor), publication(bookPublication), year(bookYear), count_of_pages(bookPages), genre(bookGenre), link(bookLink), currentPage(1) {}
 
     const string& getName() const { return name; }
     void setName(const string& newName) { name = newName; }
@@ -70,57 +65,6 @@ public:
 
     string getLink() const { return link; }
     void setLink(const string& newLink) { link = newLink; }
-
-    void readPagesFromLink() {
-        ifstream file(link);
-
-        if (!file.is_open()) {
-            cerr << "Unable to open file: " << link << endl;
-            return;
-        }
-
-        string line;
-        while (getline(file, line)) {
-            pages.push_back(line);
-        }
-
-        currentPage = 1;
-    }
-
-    void readPage(int page) const {
-        if (page >= 0 && page < pages.size()) {
-            cout << "Page " << page + 1 << ":\n" << pages[page] << endl;
-        } else {
-            cerr << "Invalid page number." << endl;
-        }
-    }
-
-    void flipPage() {
-        if (currentPage + 1 < pages.size()) {
-            ++currentPage;
-            cout << "Flipped to page " << currentPage + 1 << endl;
-        } else {
-            cout << "You are already on the last page." << endl;
-        }
-    }
-
-    vector<string> readPages(int startPage, int pagesToRead) const {
-        vector<string> result;
-
-        for (int i = startPage; i < startPage + pagesToRead && i < pages.size(); ++i) {
-            result.push_back(pages[i]);
-        }
-
-        return result;
-    }
-
-    int getCurrentPage() const {
-        return currentPage;
-    }
-
-    int getTotalPages() const {
-        return pages.size();
-    }
 
     void displayBookInfo() const {
         if (price > 0.0) {
@@ -175,29 +119,6 @@ public:
             cout << "Availability: Book is not available." << endl;
         }
     }
-
-    void readAndDisplayBookContent(int pagesToRead) const {
-    char c;
-    do {
-        vector<string> bookContent = readPages(currentPage, pagesToRead);
-
-        if (!bookContent.empty()) {
-            for (const string& page : bookContent) {
-                cout << page << endl;
-            }
-
-            cout << "Press 'Y' or 'y' to move to the next page, 'N' or 'n' to exit: ";
-            cin >> c;
-
-            if (c == 'Y' || c == 'y') {
-                flipPage();
-            }
-        } else {
-            cout << "Failed to read the book. Book is empty :(" << endl;
-            break;
-        }
-    } while ((c == 'Y' || c == 'y') && currentPage < getTotalPages());
-}
 };
 
 class Bookmark {

@@ -1,75 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "library.h"
 #include "book_data.h"
-
 using namespace std;
 
-void readAndDisplayBookContent(const Book& selectedBook, int pagesToRead) {
-    char c;
-    do {
-        vector<string> bookContent = selectedBook.readPages(selectedBook.getCurrentPage(), pagesToRead);
+extern vector<Book> books;
 
-        if (!bookContent.empty()) {
-            for (const string& page : bookContent) {
-                cout << page << endl;
-            }
-
-            cout << "Press 'Y' or 'y' to move to the next page, 'N' or 'n' to exit: ";
-            cin >> c;
-
-            if (c == 'Y' || c == 'y') {
-                selectedBook.flipPage(); // Перегортання на наступну сторінку
-            }
-        } else {
-            cout << "Failed to read the book. Book is empty :(" << endl;
-            break;
-        }
-    } while ((c == 'Y' || c == 'y') && selectedBook.getCurrentPage() < selectedBook.getTotalPages());
-}
-
-void displayBooks(const vector<Book>& books) {
-    for (size_t i = 0; i < books.size(); ++i) {
-        cout << i + 1 << ". ";
-        books[i].displayBookInfo();
-    }
-}
-
-void searchByAuthor(const vector<Book>& books, const string& author) {
-    vector<Book> foundBooks;
-
-    for (const Book& book : books) {
-        if (book.getAuthor() == author) {
-            foundBooks.push_back(book);
-        }
-    }
-
-    if (!foundBooks.empty()) {
-        cout << "Books found by author " << author << ":" << endl;
-        displayBooks(foundBooks);
-
-        size_t choice;
-        cout << "Enter the number of the book you want to read (0 to cancel): ";
-        cin >> choice;
-
-        if (choice > 0 && choice <= foundBooks.size()) {
-            const Book& selectedBook = foundBooks[choice - 1];
-            selectedBook.displayBookInfo();
-
-            if (wantToRead()) {
-                int pagesToRead = 40;
-                selectedBook.readAndDisplayBookContent(pagesToRead);
-            } else {
-                cout << "Operation canceled or invalid choice." << endl;
-            }
-        } else {
-            cout << "Invalid choice." << endl;
-        }
-    } else {
-        cout << "Book haven't found by author: " << author << endl;
-    }
-}
+string readBookContent(const string& link);
+void searchByAuthor(const vector<Book>& books, const string& author);
+void searchByTitle(const vector<Book>& books, const string& title);
 
 int main() {
     setlocale(LC_ALL, "ukr");
@@ -97,7 +38,7 @@ Enter your choice: )";
                 cout << "Enter book title: ";
                 cin.ignore();
                 getline(cin, title);
-                //searchByTitle(books, title);
+                searchByTitle(books, title);
                 break;
             }
             case '3': {
@@ -112,6 +53,138 @@ Enter your choice: )";
 
         cin.ignore();
     } while (choice != '3');
-
+    
     return 0;
 }
+
+string readBookContent(const string& link) {
+    ifstream file(link);
+
+    if (!file.is_open()) {
+        cerr << "Unable to open file: " << link << endl;
+        return "";
+    }
+
+    string bookContent;
+    string line;
+
+    while (getline(file, line)) {
+        bookContent += line + "\n";
+    }
+
+    file.close();
+
+    return bookContent;
+}
+
+void searchByAuthor(const vector<Book>& books, const string& author) {
+    vector<Book> foundBooks;
+
+    for (const Book& book : books) {
+        if (book.getAuthor() == author) {
+            foundBooks.push_back(book);
+        }
+    }
+
+    if (!foundBooks.empty()) {
+        cout << "Books found by author " << author << ":" << endl;
+
+        for (size_t i = 0; i < foundBooks.size(); ++i) {
+            cout << i + 1 << ". " << foundBooks[i].getName() << endl;
+        }
+
+        cout << "Enter the number of the book you want to read (0 to cancel): ";
+        size_t choice;
+        cin >> choice;
+
+        if (choice > 0 && choice <= foundBooks.size()) {
+            const Book& selectedBook = foundBooks[choice - 1];
+
+            cout << "Book selected: " << selectedBook.getName() << endl;
+            selectedBook.displayBookInfo();
+            cout << "Do you want to read the book? (Y/N)\n";
+            char c;
+            cin >> c;
+
+            if (c == 'Y') {
+                string bookContent = readBookContent(selectedBook.getLink());
+
+                if (!bookContent.empty()) {
+                    cout << "Book Content:\n" << bookContent << endl;
+                } else {
+                    cout << "Failed to read the book." << endl;
+                }
+            }
+        } else {
+            cout << "Operation canceled or invalid choice." << endl;
+        }
+    } else {
+        cout << "Book haven't found by author: " << author << endl;
+    }
+}
+
+void searchByTitle(const vector<Book>& books, const string& title) {
+    vector<Book> foundBooks;
+
+    for (const Book& book : books) {
+        if (book.getName() == title) {
+            foundBooks.push_back(book);
+        }
+    }
+
+    if (!foundBooks.empty()) {
+        cout << "Books found by title " << title << ":" << endl;
+
+        for (size_t i = 0; i < foundBooks.size(); ++i) {
+            cout << i + 1 << ". " << foundBooks[i].getName() << endl;
+        }
+
+        cout << "Enter the number of the book you want to read (0 to cancel): ";
+        size_t choice;
+        cin >> choice;
+
+        if (choice > 0 && choice <= foundBooks.size()) {
+            const Book& selectedBook = foundBooks[choice - 1];
+
+            cout << "Book selected: " << selectedBook.getName() << endl;
+            selectedBook.displayBookInfo();
+            cout << "Do you want to read the book? (Y/N)\n";
+            char c;
+            cin >> c;
+
+            if (c == 'Y') {
+                string bookContent = readBookContent(selectedBook.getLink());
+
+                if (!bookContent.empty()) {
+                    cout << "Book Content:\n" << bookContent << endl;
+                } else {
+                    cout << "Failed to read the book." << endl;
+                }
+            }
+        } else {
+            cout << "Operation canceled or invalid choice." << endl;
+        }
+    } else {
+        cout << "Book haven't found by title: " << title << endl;
+    }
+}
+/**
+string readBookContent(const string& link) {
+    ifstream file(link);
+
+    if (!file.is_open()) {
+        cerr << "Unable to open file: " << link << endl;
+        return "";
+    }
+
+    string bookContent;
+    string line;
+
+    while (getline(file, line)) {
+        bookContent += line + "\n";
+    }
+
+    file.close();
+
+    return bookContent;
+}*/
