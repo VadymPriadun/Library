@@ -8,7 +8,8 @@ using namespace std;
 
 extern vector<Book> books;
 
-string readBookContent(const string& link);
+vector<string> readBookContent(const string& link);
+void displayPages(const vector<string>& bookContent);
 void searchByAuthor(const vector<Book>& books, const string& author);
 void searchByTitle(const vector<Book>& books, const string& title);
 
@@ -25,7 +26,8 @@ Enter your choice: )";
         cin >> choice;
 
         switch (choice) {
-            case '1': {
+            case '1':
+            {
                 string author;
                 cout << "Enter author name: ";
                 cin.ignore();
@@ -33,7 +35,8 @@ Enter your choice: )";
                 searchByAuthor(books, author);
                 break;
             }
-            case '2': {
+            case '2':
+            {
                 string title;
                 cout << "Enter book title: ";
                 cin.ignore();
@@ -41,35 +44,35 @@ Enter your choice: )";
                 searchByTitle(books, title);
                 break;
             }
-            case '3': {
+            case '3':
+            {
                 cout << "Exiting program." << endl;
                 break;
             }
-            default: {
+            default:
+            {
                 cout << "Invalid choice. Please enter a valid option." << endl;
                 break;
             }
         }
-
         cin.ignore();
     } while (choice != '3');
     
     return 0;
 }
 
-string readBookContent(const string& link) {
+vector<string> readBookContent(const string& link) {
     ifstream file(link);
+    vector<string> bookContent;
+    string line;
 
     if (!file.is_open()) {
         cerr << "Unable to open file: " << link << endl;
-        return "";
+        return bookContent;
     }
 
-    string bookContent;
-    string line;
-
     while (getline(file, line)) {
-        bookContent += line + "\n";
+        bookContent.push_back(line);
     }
 
     file.close();
@@ -77,6 +80,22 @@ string readBookContent(const string& link) {
     return bookContent;
 }
 
+void displayPages(const vector<string>& bookContent) {
+    const int linesPerPage = 40;
+    int currentPage = 1;
+
+    for (size_t i = 0; i < bookContent.size(); i += linesPerPage) {
+        cout << "Page " << currentPage << ":\n";
+        
+        for (size_t j = i; j < i + linesPerPage && j < bookContent.size(); ++j) {
+            cout << bookContent[j] << endl;
+        }
+
+        cout << "Press Enter to continue to the next page...";
+        cin.ignore();
+        currentPage++;
+    }
+}
 void searchByAuthor(const vector<Book>& books, const string& author) {
     vector<Book> foundBooks;
 
@@ -107,10 +126,10 @@ void searchByAuthor(const vector<Book>& books, const string& author) {
             cin >> c;
 
             if (c == 'Y') {
-                string bookContent = readBookContent(selectedBook.getLink());
+                vector<string> bookContent = readBookContent(selectedBook.getLink());
 
                 if (!bookContent.empty()) {
-                    cout << "Book Content:\n" << bookContent << endl;
+                    displayPages(bookContent);
                 } else {
                     cout << "Failed to read the book." << endl;
                 }
@@ -153,10 +172,10 @@ void searchByTitle(const vector<Book>& books, const string& title) {
             cin >> c;
 
             if (c == 'Y') {
-                string bookContent = readBookContent(selectedBook.getLink());
+                vector<string> bookContent = readBookContent(selectedBook.getLink());
 
                 if (!bookContent.empty()) {
-                    cout << "Book Content:\n" << bookContent << endl;
+                    displayPages(bookContent);
                 } else {
                     cout << "Failed to read the book." << endl;
                 }
@@ -168,23 +187,3 @@ void searchByTitle(const vector<Book>& books, const string& title) {
         cout << "Book haven't found by title: " << title << endl;
     }
 }
-/**
-string readBookContent(const string& link) {
-    ifstream file(link);
-
-    if (!file.is_open()) {
-        cerr << "Unable to open file: " << link << endl;
-        return "";
-    }
-
-    string bookContent;
-    string line;
-
-    while (getline(file, line)) {
-        bookContent += line + "\n";
-    }
-
-    file.close();
-
-    return bookContent;
-}*/
