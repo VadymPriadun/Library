@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ctime>
 
 using namespace std;
 
@@ -160,13 +161,13 @@ class ReadingStats {
 private:
     const Book& linkedBook;
     int statsID;
-    double startTime;
-    double endTime;
+    clock_t startTime;
+    clock_t endTime;
     int totalPagesRead;
 
 public:
     ReadingStats(const Book& book, int id, double start, double end, int total)
-        : linkedBook(book), statsID(id), startTime(start), endTime(end), totalPagesRead(total) {}
+        : linkedBook(book), statsID(id), startTime(start), endTime(end), totalPagesRead(total) {startTime = clock();}
 
     const Book& getLinkedBook() const { return linkedBook; }
 
@@ -193,6 +194,14 @@ public:
         } else {
             cout << "Availability: Book is not available." << endl;
         }
+    }
+    void finishReading() {
+        endTime = clock();
+        displayStatsInfo();
+    }
+
+    double getReadingDuration() const {
+        return static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC;
     }
 };
 #endif
