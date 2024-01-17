@@ -8,11 +8,7 @@
 
 using namespace std;
 
-enum Status{
-    OPENED, CLOSED, DELETED 
-};
-
-enum Genre {
+enum Genre{
     FICTION,
     NON_FICTION,
     MYSTERY,
@@ -28,7 +24,7 @@ enum Genre {
     MILITARY
 };
 
-class Book {
+class Book{
 private:
     string name;
     double price;
@@ -68,7 +64,8 @@ public:
     void setLink(const string& newLink) { link = newLink; }
 
     void displayBookInfo() const {
-        if (price > 0.0) {
+        if (price > 0.0)
+        {
             cout << "Book Information:" << endl;
             cout << "Name: " << name << endl;
             cout << "Price: $" << price << endl;
@@ -79,7 +76,7 @@ public:
             cout << "Page " << currentPage << " of " << (count_of_pages / 20) + 1 << ":\n";
 
             cout << "Genre: ";
-            switch (genre) {
+            switch (genre){
                 case FICTION:
                     cout << "Fiction";
                     break;
@@ -116,13 +113,15 @@ public:
             }
 
             cout << endl;
-        } else {
+        }
+        else
+        {
             cout << "Availability: Book is not available." << endl;
         }
     }
 };
 
-class Bookmark {
+class Bookmark{
 private:
     const Book& linkedBook;
     int bookmarkID;
@@ -145,19 +144,22 @@ public:
     void setTimestamp(double time) { timestamp = time; }
 
     void displayBookmarkInfo() const {
-        if (linkedBook.getPrice() > 0.0) {
+        if (linkedBook.getPrice() > 0.0)
+        {
             cout << "Bookmark Information:" << endl;
             cout << "Book Name: " << linkedBook.getName() << endl;
             cout << "Bookmark ID: " << bookmarkID << endl;
             cout << "Page Number: " << pageNumber << endl;
             cout << "Timestamp: " << timestamp << endl;
-        } else {
+        }
+        else
+        {
             cout << "Availability: Book is not available." << endl;
         }
     }
 };
 
-class ReadingStats {
+class ReadingStats{
 private:
     const Book& linkedBook;
     int statsID;
@@ -183,19 +185,20 @@ public:
     int getTotalPagesRead() const { return totalPagesRead; }
     void setTotalPagesRead(int total) { totalPagesRead = total; }
 
-    void displayStatsInfo() const {
-        if (linkedBook.getPrice() > 0.0) {
+    void displayStatsInfo() const{
+        if (linkedBook.getPrice() > 0.0)
+        {
             cout << "Reading Stats Information:" << endl;
             cout << "Book Name: " << linkedBook.getName() << endl;
             cout << "Stats ID: " << statsID << endl;
-            cout << "Start Time: " << startTime << endl;
-            cout << "End Time: " << endTime << endl;
             cout << "Total Pages Read: " << totalPagesRead << endl;
-        } else {
+        }
+        else
+        {
             cout << "Availability: Book is not available." << endl;
         }
     }
-    void finishReading() {
+    void finishReading(){
         endTime = clock();
         displayStatsInfo();
     }

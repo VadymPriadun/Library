@@ -1,23 +1,19 @@
-#include <iostream>
-#include <vector>
-#include <string>
 #include <fstream>
 #include "library.h"
 #include "book_data.h"
 using namespace std;
 
 extern vector<Book> books;
-
 vector<string> readBookContent(const string& link);
 bool displayPages(const vector<string>& bookContent);
 void searchByAuthor(const vector<Book>& books, const string& author);
 void searchByTitle(const vector<Book>& books, const string& title);
 
-int main() {
+int main(){
     setlocale(LC_ALL, "ukr");
     char choice;
 
-    do {
+    do{
         cout << R"(Main Menu:
 1. Search by Author
 2. Search by Title
@@ -25,7 +21,7 @@ int main() {
 Enter your choice: )";
         cin >> choice;
 
-        switch (choice) {
+        switch (choice){
             case '1':
             {
                 string author;
@@ -56,22 +52,24 @@ Enter your choice: )";
             }
         }
         cin.ignore();
-    } while (choice != '3');
+    }while (choice != '3');
     
     return 0;
 }
 
-vector<string> readBookContent(const string& link) {
+vector<string> readBookContent(const string& link){
     ifstream file(link);
     vector<string> bookContent;
     string line;
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Unable to open file: " << link << endl;
         return bookContent;
     }
 
-    while (getline(file, line)) {
+    while (getline(file, line))
+    {
         bookContent.push_back(line);
     }
 
@@ -80,22 +78,25 @@ vector<string> readBookContent(const string& link) {
     return bookContent;
 }
 
-bool displayPages(const vector<string>& bookContent) {
+bool displayPages(const vector<string>& bookContent){
     const int linesPerPage = 20;
     int currentPage = 1;
 
-    for (size_t i = 0; i < bookContent.size(); i += linesPerPage) {
+    for (size_t i = 0; i < bookContent.size(); i += linesPerPage)
+    {
         cout << "Page " << currentPage << ":\n";
 
-        for (size_t j = i; j < i + linesPerPage && j < bookContent.size(); ++j) {
+        for (size_t j = i; j < i + linesPerPage && j < bookContent.size(); ++j)
+        {
             cout << bookContent[j] << endl;
         }
 
-        cout << "Press 'N/n' to move to the next page, or 'E/e' to finish reading the book.";
+        cout << "Press 'N/n' to move to the next page, or 'F/f' to finish reading the book.";
         char userInput;
         cin >> userInput;
 
-        if (userInput == 'E' || userInput == 'e') {
+        if (userInput == 'F' || userInput == 'f')
+        {
             return true;
         }
         cin.ignore();
@@ -104,19 +105,23 @@ bool displayPages(const vector<string>& bookContent) {
     return false;
 }
 
-void searchByAuthor(const vector<Book>& books, const string& author) {
+void searchByAuthor(const vector<Book>& books, const string& author){
     vector<Book> foundBooks;
 
-    for (const Book& book : books) {
-        if (book.getAuthor() == author) {
+    for (const Book& book : books)
+    {
+        if (book.getAuthor() == author)
+        {
             foundBooks.push_back(book);
         }
     }
 
-    if (!foundBooks.empty()) {
+    if (!foundBooks.empty())
+    {
         cout << "Books found by author " << author << ":" << endl;
 
-        for (size_t i = 0; i < foundBooks.size(); ++i) {
+        for (size_t i = 0; i < foundBooks.size(); ++i)
+        {
             cout << i + 1 << ". " << foundBooks[i].getName() << endl;
         }
 
@@ -124,52 +129,68 @@ void searchByAuthor(const vector<Book>& books, const string& author) {
         size_t choice;
         cin >> choice;
 
-        if (choice > 0 && choice <= foundBooks.size()) {
+        if (choice > 0 && choice <= foundBooks.size())
+        {
             const Book& selectedBook = foundBooks[choice - 1];
 
             cout << "Book selected: " << selectedBook.getName() << endl;
             selectedBook.displayBookInfo();
+
             cout << "Do you want to read the book? (Y/N)\n";
             char c;
             cin >> c;
 
-            if (c == 'Y') {
+            if (c == 'Y')
+            {
                 ReadingStats readingStats(selectedBook, 1, 0.0, 0.0, 0);
                 vector<string> bookContent = readBookContent(selectedBook.getLink());
 
-                if (!bookContent.empty()) {
+                if (!bookContent.empty())
+                {
                     displayPages(bookContent);
 
                     readingStats.setEndTime(clock());
                     readingStats.displayStatsInfo();
                     cout << "Total reading duration: " << readingStats.getReadingDuration() << " seconds" << endl;
-                } else {
+                }
+                else
+                {
                     cout << "Failed to read the book." << endl;
                 }
-            } else {
+            }
+            else
+            {
                 cout << "Operation canceled." << endl;
             }
-        } else {
+        }
+        else
+        {
             cout << "Invalid choice." << endl;
         }
-    } else {
+    }
+    else
+    {
         cout << "Book haven't found by author: " << author << endl;
     }
 }
 
-void searchByTitle(const vector<Book>& books, const string& title) {
+void searchByTitle(const vector<Book>& books, const string& title){
     vector<Book> foundBooks;
 
-    for (const Book& book : books) {
-        if (book.getName() == title) {
+    for (const Book& book : books)
+    {
+        if (book.getName() == title)
+        {
             foundBooks.push_back(book);
         }
     }
 
-    if (!foundBooks.empty()) {
+    if (!foundBooks.empty())
+    {
         cout << "Books found by title " << title << ":" << endl;
 
-        for (size_t i = 0; i < foundBooks.size(); ++i) {
+        for (size_t i = 0; i < foundBooks.size(); ++i)
+        {
             cout << i + 1 << ". " << foundBooks[i].getName() << endl;
         }
 
@@ -177,7 +198,8 @@ void searchByTitle(const vector<Book>& books, const string& title) {
         size_t choice;
         cin >> choice;
 
-        if (choice > 0 && choice <= foundBooks.size()) {
+        if (choice > 0 && choice <= foundBooks.size())
+        {
             const Book& selectedBook = foundBooks[choice - 1];
 
             cout << "Book selected: " << selectedBook.getName() << endl;
@@ -186,26 +208,36 @@ void searchByTitle(const vector<Book>& books, const string& title) {
             char c;
             cin >> c;
 
-            if (c == 'Y') {
+            if (c == 'Y')
+            {
                 ReadingStats readingStats(selectedBook, 1, 0.0, 0.0, 0);
                 vector<string> bookContent = readBookContent(selectedBook.getLink());
 
-                if (!bookContent.empty()) {
+                if (!bookContent.empty())
+                {
                     displayPages(bookContent);
 
                     readingStats.setEndTime(clock());
                     readingStats.displayStatsInfo();
                     cout << "Total reading duration: " << readingStats.getReadingDuration() << " seconds" << endl;
-                } else {
+                }
+                else
+                {
                     cout << "Failed to read the book." << endl;
                 }
-            } else {
+            }
+            else
+            {
                 cout << "Operation canceled." << endl;
             }
-        } else {
+        }
+        else
+        {
             cout << "Invalid choice." << endl;
         }
-    } else {
+    }
+    else
+    {
         cout << "Book haven't found by title: " << title << endl;
     }
 }
