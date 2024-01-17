@@ -111,8 +111,8 @@ public:
                     cout << "Technical";
                     break;
             }
-
             cout << endl;
+            cout << "*--------------------*" << endl;
         }
         else
         {
@@ -121,43 +121,6 @@ public:
     }
 };
 
-class Bookmark{
-private:
-    const Book& linkedBook;
-    int bookmarkID;
-    int pageNumber;
-    double timestamp;
-
-public:
-    Bookmark(const Book& book, int id, int page, double time)
-        : linkedBook(book), bookmarkID(id), pageNumber(page), timestamp(time) {}
-
-    const Book& getLinkedBook() const { return linkedBook; }
-
-    int getBookmarkID() const { return bookmarkID; }
-    void setBookmarkID(int id) { bookmarkID = id; }
-
-    int getPageNumber() const { return pageNumber; }
-    void setPageNumber(int page) { pageNumber = page; }
-
-    double getTimestamp() const { return timestamp; }
-    void setTimestamp(double time) { timestamp = time; }
-
-    void displayBookmarkInfo() const {
-        if (linkedBook.getPrice() > 0.0)
-        {
-            cout << "Bookmark Information:" << endl;
-            cout << "Book Name: " << linkedBook.getName() << endl;
-            cout << "Bookmark ID: " << bookmarkID << endl;
-            cout << "Page Number: " << pageNumber << endl;
-            cout << "Timestamp: " << timestamp << endl;
-        }
-        else
-        {
-            cout << "Availability: Book is not available." << endl;
-        }
-    }
-};
 
 class ReadingStats{
 private:
@@ -192,6 +155,7 @@ public:
             cout << "Book Name: " << linkedBook.getName() << endl;
             cout << "Stats ID: " << statsID << endl;
             cout << "Total Pages Read: " << totalPagesRead << endl;
+            cout << "Total reading duration: " << static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC << " seconds" << endl;
         }
         else
         {
@@ -201,10 +165,6 @@ public:
     void finishReading(){
         endTime = clock();
         displayStatsInfo();
-    }
-
-    double getReadingDuration() const {
-        return static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC;
     }
 };
 #endif

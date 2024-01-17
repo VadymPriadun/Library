@@ -11,6 +11,13 @@ void searchByTitle(const vector<Book>& books, const string& title);
 
 int main(){
     setlocale(LC_ALL, "ukr");
+
+    cout << R"(/---------E-Library---------\)" << endl;
+    cout << "I made some examples of books in txt format. Authors and their books: \n";
+    for (const auto& book : books) {
+        cout << "Author: " << book.getAuthor() << " - Book: " << book.getName() << " " << book.getYear() << " year. "<< endl;
+    }
+
     char choice;
 
     do{
@@ -52,6 +59,7 @@ Enter your choice: )";
             }
         }
         cin.ignore();
+        cout << "*--------------------*" << endl;
     }while (choice != '3');
     
     return 0;
@@ -78,29 +86,32 @@ vector<string> readBookContent(const string& link){
     return bookContent;
 }
 
-
-
-void searchByAuthor(const vector<Book>& books, const string& author) {
+void searchByAuthor(const vector<Book>& books, const string& author){
     vector<Book> foundBooks;
 
-    for (const Book& book : books) {
-        if (book.getAuthor() == author) {
+    for (const Book& book : books)
+    {
+        if (book.getAuthor() == author)
+        {
             foundBooks.push_back(book);
         }
     }
 
-    if (!foundBooks.empty()) {
+    if (!foundBooks.empty())
+    {
         cout << "Books found by author " << author << ":" << endl;
 
-        for (size_t i = 0; i < foundBooks.size(); ++i) {
+        for (size_t i = 0; i < foundBooks.size(); ++i)
+        {
             cout << i + 1 << ". " << foundBooks[i].getName() << endl;
         }
 
-        cout << "Enter the number of the book you want to read (0 to cancel): ";
+        cout << "Enter the number of the book you want to read (0 to cancel): " << endl;
         size_t choice;
         cin >> choice;
-
-        if (choice > 0 && choice <= foundBooks.size()) {
+        cout << "*--------------------*" << endl;
+        if (choice > 0 && choice <= foundBooks.size())
+        {
             const Book& selectedBook = foundBooks[choice - 1];
 
             cout << "Book selected: " << selectedBook.getName() << endl;
@@ -109,20 +120,18 @@ void searchByAuthor(const vector<Book>& books, const string& author) {
             cout << "Do you want to read the book? (Y/N)\n";
             char c;
             cin >> c;
-
-            if (c == 'Y') {
-                // Створення об'єкта ReadingStats
+            if (c == 'Y')
+            {
                 ReadingStats readingStats(selectedBook, 1, 0.0, 0.0, 0);
                 vector<string> bookContent = readBookContent(selectedBook.getLink());
 
-                if (!bookContent.empty()) {
-                    // Виклик функції displayPages з об'єктом ReadingStats та передачею номера сторінки
+                if (!bookContent.empty()){
                     int startingPage = readingStats.getTotalPagesRead() + 1;
 
                     cout << "Do you want to start reading from the beginning or continue from a specific page? (B/C)\n";
                     cin >> c;
 
-                    switch (c) {
+                    switch (c){
                         case 'B':
                         case 'b':
 
@@ -145,49 +154,59 @@ void searchByAuthor(const vector<Book>& books, const string& author) {
                             readingStats.setEndTime(clock());
                             break;
                     }
-
+                    cout << "*--------------------*" << endl;
                     readingStats.displayStatsInfo();
-                    cout << "Total reading duration: " << readingStats.getReadingDuration() << " seconds" << endl;
+                    
                 }
-                else {
+                else
+                {
                     cout << "Failed to read the book." << endl;
                 }
             }
-            else {
+            else
+            {
                 cout << "Operation canceled." << endl;
             }
         }
-        else {
+        else
+        {
             cout << "Invalid choice." << endl;
         }
     }
-    else {
+    else
+    {
         cout << "Book haven't found by author: " << author << endl;
     }
 }
 
 
-void searchByTitle(const vector<Book>& books, const string& title) {
+void searchByTitle(const vector<Book>& books, const string& title){
     vector<Book> foundBooks;
 
-    for (const Book& book : books) {
-        if (book.getName() == title) {
+    for (const Book& book : books)
+    {
+        if (book.getName() == title)
+        {
             foundBooks.push_back(book);
         }
     }
 
-    if (!foundBooks.empty()) {
+    if (!foundBooks.empty())
+    {
         cout << "Books found by title " << title << ":" << endl;
 
-        for (size_t i = 0; i < foundBooks.size(); ++i) {
+        for (size_t i = 0; i < foundBooks.size(); ++i)
+        {
             cout << i + 1 << ". " << foundBooks[i].getName() << endl;
         }
 
-        cout << "Enter the number of the book you want to read (0 to cancel): ";
+        cout << "Enter the number of the book you want to read (0 to cancel): " << endl;
         size_t choice;
         cin >> choice;
+        cout << "*--------------------*" << endl;
 
-        if (choice > 0 && choice <= foundBooks.size()) {
+        if (choice > 0 && choice <= foundBooks.size())
+        {
             const Book& selectedBook = foundBooks[choice - 1];
 
             cout << "Book selected: " << selectedBook.getName() << endl;
@@ -195,30 +214,27 @@ void searchByTitle(const vector<Book>& books, const string& title) {
             cout << "Do you want to read the book? (Y/N)\n";
             char c;
             cin >> c;
-
-            if (c == 'Y') {
-                // Створення об'єкта ReadingStats
+            if (c == 'Y')
+            {
                 ReadingStats readingStats(selectedBook, 1, 0.0, 0.0, 0);
                 vector<string> bookContent = readBookContent(selectedBook.getLink());
 
-                if (!bookContent.empty()) {
-                    // Виклик функції displayPages з об'єктом ReadingStats та передачею номера сторінки
+                if (!bookContent.empty())
+                {
                     int startingPage = readingStats.getTotalPagesRead() + 1;
 
                     cout << "Do you want to start reading from the BEGINNING or CONTINUE from a specific page? (B/C)\n";
                     cin >> c;
 
-                    switch (c) {
+                    switch (c){
                         case 'B':
                         case 'b':
-                            // Початок читання з початку
                             readingStats.setStartTime(clock());
                             displayPages(readingStats, bookContent, startingPage);
                             readingStats.setEndTime(clock());
                             break;
                         case 'C':
                         case 'c':
-                            // Продовження читання з певної сторінки
                             cout << "Enter the page number to continue reading: ";
                             int pageNum;
                             cin >> pageNum;
@@ -232,23 +248,26 @@ void searchByTitle(const vector<Book>& books, const string& title) {
                             readingStats.setEndTime(clock());
                             break;
                     }
-
+                    cout << "*--------------------*" << endl;
                     readingStats.displayStatsInfo();
-                    cout << "Total reading duration: " << readingStats.getReadingDuration() << " seconds" << endl;
                 }
-                else {
+                else
+                {
                     cout << "Failed to read the book." << endl;
                 }
             }
-            else {
+            else
+            {
                 cout << "Operation canceled." << endl;
             }
         }
-        else {
+        else
+        {
             cout << "Invalid choice." << endl;
         }
     }
-    else {
+    else
+    {
         cout << "Book haven't found by title: " << title << endl;
     }
 }

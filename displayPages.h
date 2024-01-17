@@ -3,14 +3,15 @@
 #define DISPLAY_PAGES_H
 #include "library.h"
 
-bool displayPages(ReadingStats& readingStats, const vector<string>& bookContent, int startingPage = 1) {
+bool displayPages(ReadingStats& readingStats, const vector<string>& bookContent, int startingPage = 1){
     const int linesPerPage = 20;
     int currentPage = startingPage;
 
     for (size_t i = (startingPage - 1) * linesPerPage; i < bookContent.size(); i += linesPerPage)
     {
-        cout << "Page " << currentPage << ":\n";
-
+        cout << "*--------------------*" << endl;
+        cout << R"(        Page)" << currentPage << ":\n";
+        cout << "*--------------------*" << endl;
         for (size_t j = i; j < i + linesPerPage && j < bookContent.size(); ++j)
         {
             cout << bookContent[j] << endl;
@@ -32,6 +33,4 @@ bool displayPages(ReadingStats& readingStats, const vector<string>& bookContent,
     readingStats.setTotalPagesRead(readingStats.getTotalPagesRead() + currentPage - startingPage);
     return false;
 }
-
-
 #endif 

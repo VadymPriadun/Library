@@ -52,7 +52,14 @@
         "map": "cpp",
         "set": "cpp",
         "sstream": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "format": "cpp",
+        "iomanip": "cpp",
+        "span": "cpp",
+        "variant": "cpp"
     },
     "workbench.colorCustomizations": {
         "[Visual Studio Light - C++]": {
