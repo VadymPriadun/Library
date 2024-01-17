@@ -128,7 +128,7 @@ void searchByAuthor(const vector<Book>& books, const string& author){
                 if (!bookContent.empty()){
                     int startingPage = readingStats.getTotalPagesRead() + 1;
 
-                    cout << "Do you want to start reading from the beginning or continue from a specific page? (B/C)\n";
+                    cout << "Do you want to start reading from the BEGINNING or CONTINUE from a specific page? (B/C)\n";
                     cin >> c;
 
                     switch (c){

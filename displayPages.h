@@ -23,14 +23,14 @@ bool displayPages(ReadingStats& readingStats, const vector<string>& bookContent,
 
         if (userInput == 'F' || userInput == 'f')
         {
-            readingStats.setTotalPagesRead(readingStats.getTotalPagesRead() + currentPage - startingPage);
+            readingStats.setTotalPagesRead(readingStats.getTotalPagesRead() + currentPage - startingPage + 1);
             return true;
         }
         cin.ignore();
         currentPage++;
     }
 
-    readingStats.setTotalPagesRead(readingStats.getTotalPagesRead() + currentPage - startingPage);
+    readingStats.setTotalPagesRead(readingStats.getTotalPagesRead() + currentPage - startingPage + 1);
     return false;
 }
 #endif 
