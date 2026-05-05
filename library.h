@@ -110,6 +110,12 @@ public:
                 case TECHNICAL:
                     cout << "Technical";
                     break;
+                case MAGIC_REALISM:
+                    cout << "Magic Realism";
+                    break;
+                case MILITARY:
+                    cout << "Military";
+                    break;
             }
             cout << endl;
             cout << "*--------------------*" << endl;

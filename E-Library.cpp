@@ -91,7 +91,7 @@ void searchByAuthor(const vector<Book>& books, const string& author){
 
     for (const Book& book : books)
     {
-        if (book.getAuthor() == author)
+        if (book.getAuthor().find(author) != string::npos)
         {
             foundBooks.push_back(book);
         }
@@ -185,7 +185,7 @@ void searchByTitle(const vector<Book>& books, const string& title){
 
     for (const Book& book : books)
     {
-        if (book.getName() == title)
+        if (book.getName().find(title) != string::npos)
         {
             foundBooks.push_back(book);
         }
