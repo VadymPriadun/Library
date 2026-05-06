@@ -1,0 +1,34 @@
+# Скомпільовані програми та бінарники
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+elibrary
+E-Library
+E-Library.exe
+
+# Об'єктні файли (проміжні результати компіляції)
+*.o
+*.obj
+
+# Папки збірки (тут часто лежить багато "важкого" сміття)
+build/
+bin/
+out/
+Debug/
+Release/
+
+# Системні файли macOS та Windows
+.DS_Store
+Thumbs.db
+
+# Файли налаштувань редакторів (VS Code, CLion, Visual Studio)
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Кеш та тимчасові файли
+*.log
